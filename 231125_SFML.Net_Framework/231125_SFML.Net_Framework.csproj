@@ -90,7 +90,7 @@
     <Compile Include="SystemManager\InputManager.cs" />
     <Compile Include="SystemManager\ResourceManager.cs" />
     <Compile Include="BaseModels\Collision.cs" />
-    <Compile Include="SystemManager\TotalManager.cs" />
+    <Compile Include="GameMode\TotalManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemManager\VideoManager.cs" />
