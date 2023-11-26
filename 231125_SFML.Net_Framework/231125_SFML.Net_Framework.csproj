@@ -77,13 +77,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GameMode\GameModeLogo.cs" />
-    <Compile Include="GameMode\GameMode.cs" />
+    <Compile Include="BaseModels\Basics.cs" />
+    <Compile Include="Implementation\Entitys.cs" />
+    <Compile Include="Implementation\Particles.cs" />
+    <Compile Include="Implementation\Projectiles.cs" />
+    <Compile Include="Implementation\Uis.cs" />
+    <Compile Include="GameMode\GamemodeLogo.cs" />
+    <Compile Include="GameMode\Gamemode.cs" />
+    <Compile Include="GameMode\GamemodeMainMenu.cs" />
     <Compile Include="SystemManager\CameraManager.cs" />
     <Compile Include="SystemManager\DrawManager.cs" />
     <Compile Include="SystemManager\InputManager.cs" />
     <Compile Include="SystemManager\ResourceManager.cs" />
-    <Compile Include="Data\Collision.cs" />
+    <Compile Include="BaseModels\Collision.cs" />
     <Compile Include="SystemManager\TotalManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -32,7 +32,7 @@ namespace _231109_SFML_Test
         }
 
         //로직 타이머 관련 변수
-        readonly double logicFps;
+        public readonly double logicFps;
         Timer timer;
         protected Clock clock;
 
@@ -49,7 +49,12 @@ namespace _231109_SFML_Test
         protected abstract void LogicProcess();
         protected abstract void DrawProcess();
 
+
         //소멸자
+        public void DisposablesAdd(IDisposable disposable) { disposables.Add(disposable); }
+        public void DisposablesRemove(IDisposable disposable) { disposables.Remove(disposable); }
+
+        List<IDisposable> disposables = new List<IDisposable>();
         ~Gamemode() 
         {
             Dispose();
@@ -58,6 +63,12 @@ namespace _231109_SFML_Test
         {
             if (totalManager.gmNow == this) { totalManager.gmNow = null; }
 
+            while (disposables.Count > 0)
+            {
+                disposables[0].Dispose();
+                disposables.RemoveAt(0);
+            }
+            
             timer.Dispose();
             GC.SuppressFinalize(this);
         }

@@ -12,28 +12,38 @@ namespace _231109_SFML_Test
     {
         public GamemodeLogo(TotalManager tm) : base(tm, 60) { }
 
-        const int logoTime = 6000;
+        const int logoTimeMax = 4;
+        const int logoTimeEdge = 1;
 
         protected override void LogicProcess()
         {
             Time time = clock.ElapsedTime;
             int miliSec = time.AsMilliseconds();
 
-            if (miliSec > logoTime) 
+            if (miliSec > logoTimeMax) 
             {
                 totalManager.SetGamemodeType(GamemodeType.MAIN_MENU);
             }
-            Console.WriteLine(miliSec.ToString()  + "/"+ logoTime.ToString());
+            Console.WriteLine(miliSec.ToString()  + "/"+ logoTimeMax.ToString());
         }
 
         protected override void DrawProcess() 
         {
             Time time = clock.ElapsedTime;
             float logoTimeNow = time.AsMilliseconds();
-           
-            //밝기가 0 > 1 > 0으로 이동~
-            float gammaRatio = 1f - Math.Abs(logoTimeNow - logoTime / 2f) / (logoTime / 2f) * 2f;
-            byte rgbValue = (byte)(255 * gammaRatio);
+
+            float gammaRatio;
+            if (logoTimeNow < logoTimeEdge)
+                //시작 부분
+                gammaRatio = logoTimeNow / logoTimeEdge;
+            else if (logoTimeMax - logoTimeEdge < logoTimeNow)
+                //끝나는 부분
+                gammaRatio = 1f - (logoTimeNow - (logoTimeMax - logoTimeEdge)) / logoTimeEdge;
+            else
+                //중간 부분
+                gammaRatio = 1f;
+
+            byte rgbValue = (byte)(255 * Math.Max(Math.Min( gammaRatio, 1f), 0f));
 
             Vector2f res = VideoManager.resolutionNow;
             RectangleShape shape = new RectangleShape(res);

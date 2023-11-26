@@ -19,20 +19,17 @@ namespace _231109_SFML_Test
             SetGamemodeType(GamemodeType.LOGO);
         }
 
-        public void DrawAll() 
+        public void DrawAll()
         {
-            Font font = ResourceManager.fonts["Jalnan"];
-            Text text = new Text(VideoManager.fpsNow.ToString(), font);
-            text.Position = new Vector2f(VideoManager.resolutionNow.X - 200f, 0f);
-            //text.Origin = new Vector2f(-110f, 0f);
-            DrawManager.uiTex[1].Draw(text);
-
-            //DrawManager.uiTex.Draw(new Sprite(ResourceManager.textures["smgIcon"]));
-
-
-            gmNow?.DoDraw();
-
+            //카메라 위상에 맞게 Transform 최신화
+            CameraManager.RefreshTransform();
+            //카메라 흔들림 적용
             CameraManager.ShakeProcess();
+
+            //그릴거 다 그리기
+            gmNow?.DoDraw();
+            
+            //결과 텍스쳐 최신화
             DrawManager.ResultTexture();
         }
 
@@ -52,6 +49,7 @@ namespace _231109_SFML_Test
                     gmNow = new GamemodeLogo(this);
                     break;
                 case GamemodeType.MAIN_MENU:
+                    gmNow = new GamemodeMainMenu(this);
                     break;
                 case GamemodeType.INGAME:
                     break;

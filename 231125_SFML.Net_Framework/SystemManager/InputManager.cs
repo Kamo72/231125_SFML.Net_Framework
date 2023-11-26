@@ -31,7 +31,46 @@ namespace _231109_SFML_Test
                 }
             }
 
-            
+
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.W))
+            {
+                CameraManager.position.Y--;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.S))
+            {
+                CameraManager.position.Y++;
+            }
+
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.A))
+            {
+                CameraManager.position.X--;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.D))
+            {
+                CameraManager.position.X++;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.Q))
+            {
+                CameraManager.rotation--;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.E))
+            {
+                CameraManager.rotation++;
+            }
+
+            if (Keyboard.IsKeyPressed(Keyboard.Key.R))
+            {
+                CameraManager.zoomValue *= 1.001f;
+            }
+            if (Keyboard.IsKeyPressed(Keyboard.Key.F))
+            {
+                CameraManager.zoomValue /= 1.001f;
+            }
+
+
         }
 
 
