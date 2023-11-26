@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -40,7 +41,7 @@ namespace _231109_SFML_Test
                 else
                     throw new NotImplementedException();
             }
-            get
+            get 
             {
                 if (mask is Box box)
                     return box.Position;
@@ -53,16 +54,13 @@ namespace _231109_SFML_Test
             } 
         }
 
-        ICollision mask;
+        public ICollision mask;
 
         protected abstract void LogicProcess();
         protected abstract void PhysicsProcess();
         protected abstract void DrawProcess();
 
-        ~Entity() 
-        {
-            Dispose();
-        }
+        ~Entity() { Dispose(); }
         public void Dispose()
         {
             gamemode.DisposablesRemove(this);
@@ -117,10 +115,7 @@ namespace _231109_SFML_Test
         }
         public event Action Clicked;
 
-        ~Ui()
-        {
-            Dispose();
-        }
+        ~Ui() { Dispose(); }
 
         public new void Dispose()
         {
@@ -135,35 +130,185 @@ namespace _231109_SFML_Test
 
     }
 
-    internal abstract class Particle : Transformable, Drawable
+    internal abstract class Particle : IDisposable
     {
-        public abstract void Draw(RenderTarget target, RenderStates states);
-
-        public void Draw(RenderTarget target)
+        Gamemode gamemode;
+        public Particle(Gamemode gamemode, int lifeTime, Vector2f position, Vector2f scale, float rotation = 0f) 
         {
-            Draw(target, RenderStates.Default);
+            this.position = position;
+            this.rotation = rotation;
+            this.scale = scale;
+
+            lifeMax = lifeTime;
+            lifeNow = lifeTime;
+
+            this.gamemode = gamemode;
+            gamemode.DisposablesAdd(this);
+            gamemode.drawEvent += DrawProcess;
+            gamemode.logicEvent += LogicProcess;
+            gamemode.logicEvent += LifeProcess;
         }
 
+        public int lifeMax, lifeNow;
+        public float lifeRatio { get { return (float)lifeMax / lifeNow; } }
+        
+        public Vector2f position;
+        public Vector2f scale;
+        public float rotation;
+
+        void LifeProcess() 
+        {
+            lifeNow--;
+            if(lifeNow == 0) Dispose();
+        }
+
+        public abstract void DrawProcess();
+        public abstract void LogicProcess();
+
+
+        ~Particle() { Dispose(); }
+        public void Dispose()
+        {
+            gamemode.DisposablesRemove(this);
+            gamemode.drawEvent -= DrawProcess;
+            gamemode.logicEvent -= LogicProcess;
+            gamemode.logicEvent -= LifeProcess;
+
+            GC.SuppressFinalize(this);
+        }
     }
 
     internal abstract class Projectile : IDisposable
     {
+        Gamemode gamemode;
+        public Projectile(Gamemode gamemode, int lifeTime, ICollision mask, Vector2f position, float rotation = 0f, float speed = 0f)
+        {
+            this.mask = mask;
+            this.position = position;
+            this.rotation = rotation;
+            this.speed = rotation.ToVector() * speed;
+
+            lifeMax = lifeTime;
+            lifeNow = lifeTime;
+
+            this.gamemode = gamemode;
+            gamemode.DisposablesAdd(this);
+            gamemode.drawEvent += DrawProcess;
+            gamemode.logicEvent += LogicProcess;
+            gamemode.logicEvent += PhysicProcess;
+            gamemode.logicEvent += LifeProcess;
+        }
+
+        public int lifeMax, lifeNow;
+        public float lifeRatio { get { return (float)lifeMax / lifeNow; } }
+
+        public Vector2f position
+        {
+            set
+            {
+                if (mask is Box box)
+                    box.Position = value;
+                else if (mask is Circle circle)
+                    circle.Position = value;
+                else if (mask is Point point)
+                    point.position = value;
+                else
+                    throw new NotImplementedException();
+            }
+            get
+            {
+                if (mask is Box box)
+                    return box.Position;
+                else if (mask is Circle circle)
+                    return circle.Position;
+                else if (mask is Point point)
+                    return point.position;
+                else
+                    throw new NotImplementedException();
+            }
+        }
+        public float rotation;
+        public Vector2f speed;
+
         public ICollision mask;
 
-        ~Projectile() { Dispose(); }
+        void LifeProcess()
+        {
+            lifeNow--;
+            if (lifeNow == 0) Dispose();
+        }
+        void PhysicProcess()
+        {
+            float deltaTime = 1000f / (float)gamemode.logicFps;
+            position += speed * (float)deltaTime;
+        }
+
+        public abstract void DrawProcess();
+        public abstract void LogicProcess();
+
+
+        ~Projectile(){ Dispose(); }
         public void Dispose()
         {
+            gamemode.DisposablesRemove(this);
+            gamemode.drawEvent -= DrawProcess;
+            gamemode.logicEvent -= LogicProcess;
+            gamemode.logicEvent -= PhysicProcess;
+            gamemode.logicEvent -= LifeProcess;
+
             GC.SuppressFinalize(this);
         }
     }
 
     internal abstract class Structure : IDisposable
     {
+        Gamemode gamemode;
+        public Structure(Gamemode gamemode, Vector2f position, ICollision collision)
+        {
+            mask = collision;
+            this.position = position;
+
+            this.gamemode = gamemode;
+            gamemode.DisposablesAdd(this);
+            gamemode.drawEvent += DrawProcess;
+        }
+
         public ICollision mask;
+        public Vector2f position
+        {
+            set
+            {
+                if (mask is Box box)
+                    box.Position = value;
+                else if (mask is Circle circle)
+                    circle.Position = value;
+                else if (mask is Point point)
+                    point.position = value;
+                else
+                    throw new NotImplementedException();
+            }
+            get
+            {
+                if (mask is Box box)
+                    return box.Position;
+                else if (mask is Circle circle)
+                    return circle.Position;
+                else if (mask is Point point)
+                    return point.position;
+                else
+                    throw new NotImplementedException();
+            }
+        }
+
+        protected abstract void DrawProcess();
+
 
         ~Structure() { Dispose(); }
         public void Dispose()
         {
+            gamemode.DisposablesRemove(this);
+            gamemode.drawEvent -= DrawProcess;
+
             GC.SuppressFinalize(this);
         }
     }

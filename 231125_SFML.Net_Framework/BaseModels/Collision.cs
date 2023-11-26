@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace _231109_SFML_Test
 {
-    public interface ICollision 
+    public interface ICollision : Drawable
     {
         bool IsCollision(ICollision other);
     }

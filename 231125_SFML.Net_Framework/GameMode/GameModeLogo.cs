@@ -45,7 +45,7 @@ namespace _231109_SFML_Test
 
             byte rgbValue = (byte)(255 * Math.Max(Math.Min( gammaRatio, 1f), 0f));
 
-            Vector2f res = VideoManager.resolutionNow;
+            Vector2f res = (Vector2f)VideoManager.resolutionNow;
             RectangleShape shape = new RectangleShape(res);
             shape.FillColor = new Color(rgbValue, rgbValue, rgbValue);
             DrawManager.uiTex[0].Draw(shape);

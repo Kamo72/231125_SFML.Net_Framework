@@ -20,7 +20,7 @@ namespace _231109_SFML_Test
         }
 
         //해상도에 맞게 텍스쳐 초기화
-        public static void ResolutionChanged(Vector2f resolution)
+        public static void ResolutionChanged(Vector2i resolution)
         {
             //이전의 텍스쳐 Dispose
             for (int idx = 0; idx < uiTex.Length; idx++)
@@ -51,7 +51,7 @@ namespace _231109_SFML_Test
         public static void ResultTexture()
         {
             //결과를 담을 텍스쳐 생성
-            Vector2f resolution = VideoManager.resolutionNow;
+            Vector2f resolution = (Vector2f)VideoManager.resolutionNow;
             resultTex.Clear();
 
             //레이어들을 결과 텍스쳐에 도합

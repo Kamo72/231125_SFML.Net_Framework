@@ -12,7 +12,6 @@ namespace _231109_SFML_Test
 {
     internal static class CameraManager
     {
-
         static CameraManager()
         {
             VideoManager.ChangedResolution += ChangedResolution;
@@ -34,11 +33,10 @@ namespace _231109_SFML_Test
         static double shakeValue = 0d;
         const double shakeReduction = 5d;
 
-        static void ChangedResolution(Vector2f resolution)
+        static void ChangedResolution(Vector2i resolution)
         {
-            size = resolution;
+            size = (Vector2f)resolution;
         }
-
 
         public static RenderStates worldRenderState = RenderStates.Default;
 
@@ -61,6 +59,7 @@ namespace _231109_SFML_Test
             worldRenderState.Transform.Scale(new Vector2f(1/siz, 1/siz), pos);
             worldRenderState.Transform.Rotate(rot, pos);
         }
+        
         public static bool IsSkippable(Vector2f position, float scale = 0f) 
         {
             Vector2f distVec = position - CameraManager.position;
@@ -92,12 +91,8 @@ namespace _231109_SFML_Test
                 );
             rotationShake = rot;
             sizeShake = size;
-
-
-
-
-
         }
+
         public static void GetShake(float shakeValue)
         {
             Console.WriteLine($"GetShake >>> {CameraManager.shakeValue}+{shakeValue}");

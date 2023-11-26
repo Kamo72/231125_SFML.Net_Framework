@@ -26,8 +26,9 @@ namespace _231109_SFML_Test
 
             uis.Add(new UiTest(this, new Vector2f(100f, 100f), new Vector2f(100f, 100f)));
 
+            entity = new Player(this, new Vector2f(0, 0));
         }
-
+        Entity entity;
         List<Ui> uis = new List<Ui>();
         public List<Box> boxs = new List<Box>(); 
 
@@ -59,6 +60,7 @@ namespace _231109_SFML_Test
                 foreach (Box box in boxs)
                     if(CameraManager.IsSkippable(box.Position) == false)
                         DrawManager.uiTex[1].Draw(box, CameraManager.worldRenderState);
+
         }
 
         protected override void LogicProcess()

@@ -11,6 +11,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace _231109_SFML_Test
 {
@@ -18,7 +19,7 @@ namespace _231109_SFML_Test
     {
         static VideoManager() 
         {
-            resolutionNow = resolutionPreset[7];    //WQHD
+            resolutionNow = resolutionPreset[7];
             drawfpsNow = drawfpsPreset[3];          //144
 
             clockTotal = new Clock();
@@ -80,7 +81,7 @@ namespace _231109_SFML_Test
         {
             SetWindow(resolutionNow, drawfpsNow);
         }
-        public static void SetWindow(Vector2f resolution, uint drawfps)
+        public static void SetWindow(Vector2i resolution, uint drawfps)
         {
             window?.Dispose();
 
@@ -98,24 +99,24 @@ namespace _231109_SFML_Test
         }
 
         //해상도 변경 이벤트 << SetWindow
-        public static event Action<Vector2f> ChangedResolution;
+        public static event Action<Vector2i> ChangedResolution;
 
 
         //현재 해상도 및 해상도 프리셋
-        public static Vector2f resolutionNow;
-        public static Vector2f[] resolutionPreset = new Vector2f[]
+        public static Vector2i resolutionNow;
+        public static Vector2i[] resolutionPreset = new Vector2i[]
         {
-            new Vector2f (1024, 768),   //00 XGA 
-            new Vector2f (1280, 720),   //01 HD ☆
-            new Vector2f (1280, 768),   //02 WXGA 
-            new Vector2f (1280, 800),   //03 WXGA 
-            new Vector2f (1920, 1080),  //04 FHD ☆ 
-            new Vector2f (2048, 1080),  //05 2K 
-            new Vector2f (2560, 1080),  //06 UWHD
-            new Vector2f (2560, 1440),  //07 WQHD ☆
-            new Vector2f (3440, 1440),  //08 UWQHD
-            new Vector2f (3840, 2160),  //09 UHD
-            new Vector2f (4096, 2160),  //10 4K ☆
+            new Vector2i (1024, 768),   //00 XGA 
+            new Vector2i (1280, 720),   //01 HD ☆
+            new Vector2i (1280, 768),   //02 WXGA 
+            new Vector2i (1280, 800),   //03 WXGA 
+            new Vector2i (1920, 1080),  //04 FHD ☆ 
+            new Vector2i (2048, 1080),  //05 2K 
+            new Vector2i (2560, 1080),  //06 UWHD
+            new Vector2i (2560, 1440),  //07 WQHD ☆
+            new Vector2i (3440, 1440),  //08 UWQHD
+            new Vector2i (3840, 2160),  //09 UHD
+            new Vector2i (4096, 2160),  //10 4K ☆
         };
 
         //현재 목표프레임 및 목표프레임 프리셋
@@ -128,6 +129,10 @@ namespace _231109_SFML_Test
             (uint)144,
             (uint)165,
             (uint)240,
-        }; 
+        };
+
+
+
+
     }
 }

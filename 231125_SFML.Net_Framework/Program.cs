@@ -9,6 +9,7 @@ using SFML.Audio;
 using SFML.Graphics;
 using SFML.Window;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace _231109_SFML_Test
 {
@@ -43,6 +44,7 @@ namespace _231109_SFML_Test
                         VideoManager.FrameReset();
 
                         InputManager.DebugProcess();
+
                     }
                     // 화면 업데이트
                     window.Display();
